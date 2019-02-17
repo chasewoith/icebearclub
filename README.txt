@@ -1,5 +1,3 @@
-# icebearclub
-
 === icebearclub ===
 Contributors: chasewoith
 Tags: security,login,puzzle,riddle,game,test
