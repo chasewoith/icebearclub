@@ -7,7 +7,6 @@
  * Author:      chasewoith
  * Author URI:  https://profiles.wordpress.org/chasewoith/
  * Text Domain: 
- * Domain Path: /languages
  * License:     GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +25,7 @@
 */
 
 defined('ABSPATH') or die('Ah ah ahhhhhh. No cheating.');
+include 'icebear_options.php';
 
 if (!class_exists('DiceRoller')) {
 
@@ -50,7 +50,7 @@ if (!class_exists('DiceRoller')) {
 			ob_start();
 			require_once('form/form.html');
 			$html = ob_get_clean();
-			return $html;
+			return $html; 
 		}
 
 		/**
@@ -63,47 +63,10 @@ if (!class_exists('DiceRoller')) {
 					plugin_dir_url(__FILE__) . 'js/dice.js'
 				);
 				wp_enqueue_script('dice');
+				// Set Ice Vars
+				$ice_vars = array( 'difficulty' => esc_attr(get_option( 'icebear_difficulty' )) );
+				wp_localize_script( 'dice', 'ice_vars', $ice_vars);
 			}
-		}
-
-	} // End class
-
-} // End if(!class_exists)
-
-if (!class_exists('DiceRollerWidget')) {
-
-	class DiceRollerWidget extends WP_Widget{
-
-		/**
-		 * Set up the widget in the menu.
-		 */
-		function __construct() {
-			parent::__construct(
-				'dice',
-				'Dice',
-				['description' => 'Dice roller']
-			);
-		}
-
-		/**
-		 * Register scripts with WordPress.
-		 */
-		function enqueue_js() {
-			if (!wp_script_is('dice', 'enqueued')) {
-				wp_register_script(
-					'dice',
-					plugin_dir_url(__FILE__) . 'js/dice.js'
-				);
-				wp_enqueue_script('dice');
-			}
-		}
-
-		/**
-		 * Runs the widget code.
-		 */
-		function widget($args, $instance) {
-			$this->enqueue_js();
-			require_once('form/form-widget.html');
 		}
 
 	} // End class
@@ -112,11 +75,4 @@ if (!class_exists('DiceRollerWidget')) {
 
 if (class_exists('DiceRoller')) {
 	new DiceRoller();
-}
-
-if (class_exists('DiceRollerWidget')) {
-	function dice_roller_widget() {
-		register_widget('DiceRollerWidget');
-	}
-	add_action('widgets_init', 'dice_roller_widget');
 }

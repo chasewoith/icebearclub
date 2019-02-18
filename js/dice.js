@@ -4,10 +4,11 @@ var rollTheDice = function() {
     var i,
         faceValue,
         output = '',
-        diceCount = document.querySelector('input[type=number]').value || 1;
+        diceCount = ice_vars.difficulty || 2;
     for (i = 0; i < diceCount; i++) {
         faceValue = Math.floor(Math.random() * 6);
         output += "&#x268" + faceValue + "; ";
+    	document.getElementById('dice').setAttribute("class",+faceValue);
     }
     document.getElementById('dice').innerHTML = output;
 }
